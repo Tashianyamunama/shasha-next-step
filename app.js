@@ -32,6 +32,9 @@ function buildKit() {
   const track = TRACKS.filter(function (t) { return t.id === goal; })[0] || TRACKS[0];
   const todos = track.todos.slice();
   if (stage === "sec" && (goal === "intern" || goal === "job" || goal === "skills")) todos[0] = SECONDARY_FIRST_TODO;
+  // the second to-do swaps in an obstacle-specific tip when the track defines one (content.js, "obstacleTodo") —
+  // index 1 on purpose, so it never collides with the secondary-school swap above, which always uses index 0
+  if (track.obstacleTodo && track.obstacleTodo[obstacle]) todos[1] = track.obstacleTodo[obstacle];
   let picked = track.stories.findIndex(function (s) { return s.obstacle === obstacle; });
   if (picked < 0) picked = 0;
   return { track: track, todos: todos, picked: picked };
@@ -178,8 +181,24 @@ const ICONS = {
   skills: '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>'
 };
 
+function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
+
 function section(label, children) {
-  return h("section", { class: "block" }, h("h2", { class: "sec" }, label), h("div", { class: "body" }, children));
+  return h("section", { class: "block", id: slug(label) },
+    h("h2", { class: "sec", tabindex: "-1" }, label),
+    h("div", { class: "body" }, children));
+}
+
+// chips in the rail that jump straight to a section, so students on a long page
+// can see right away that stories/resources/mistakes exist below, not just scroll into them by accident
+const JUMP_SECTIONS = ["Your starter pack", "Stories for this track", "Where to look", "Mistakes to avoid"];
+function jumpTo(label) {
+  const el = document.getElementById(slug(label));
+  if (!el) return;
+  const reduceMotion = !(window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference)").matches);
+  el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  const heading = el.querySelector("h2.sec");
+  if (heading) heading.focus({ preventScroll: true });
 }
 
 function resultView() {
@@ -290,7 +309,12 @@ function resultView() {
       h("h1", { class: "big", tabindex: "-1", "data-focus": "", style: "margin-top:16px" }, t.title),
       h("div", { class: "no-print", style: "margin-top:20px" },
         h("p", { class: "label dim" }, "Explore other tracks"),
-        h("div", { class: "chips" }, chips))),
+        h("div", { class: "chips" }, chips)),
+      h("div", { class: "no-print", style: "margin-top:20px" },
+        h("p", { class: "label dim" }, "Jump to"),
+        h("div", { class: "chips" }, JUMP_SECTIONS.map(function (label) {
+          return h("button", { class: "chip", onClick: function () { jumpTo(label); } }, label);
+        })))),
     h("div", { class: "main" },
     section("Your starter pack", todos),
     section("Stories for this track", stories),

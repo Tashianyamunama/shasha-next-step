@@ -229,6 +229,13 @@ const CONF_GROUP = {
      enabled  — set to false to hide a track from the question choices.
      title    — shown as the heading on the results page.
      todos    — the starter pack (numbered list). "url"/"label" are optional.
+     obstacleTodo — optional. Swaps in a second to-do item (#2 in the list)
+                tailored to whichever obstacle the student picked in
+                Question 3. Key by obstacle id (money/start/connect/tests);
+                only include the ones worth tailoring — any obstacle left
+                out just keeps the normal #2 to-do. This is why the starter
+                pack can change based on the last question, not just the
+                track. Same { text, url, label } shape as a normal to-do.
      stories  — exactly 3 entries expected (see note on the sample story
                 near the bottom of this file for how "link"/"audio" work).
      groups   — the link tables shown in "Where to look", tabbed by title.
@@ -247,6 +254,11 @@ const TRACKS = [
       { text: "Ask one person who has applied to a similar program to read your draft statement." },
       { text: "Keep every deadline and requirement in one place you can reopen later." }
     ],
+    obstacleTodo: {
+      money: { text: "List 3 to 5 funding sources for each program on your shortlist — scholarships, assistantships or awards — before you spend time on the application itself." },
+      start: { text: "Pick the program with the earliest deadline and work on that one first. Momentum beats a perfect plan." },
+      connect: { text: "Message one current student or recent graduate of a program you're considering and ask what they wish they'd known before applying." }
+    },
     stories: [
       { tag: "Funding", obstacle: "money", title: "[Name]: how I paid for my degree", link: "", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }, // PLACEHOLDER audio — remove when you add a real story
       { tag: "Tests and documents", obstacle: "tests", title: "[Name]: the requirements I almost missed", link: "", audio: "" },
@@ -314,6 +326,11 @@ const TRACKS = [
       { text: "Ask for one 15-minute conversation with someone doing the work you want." },
       { text: "Create a 30-second elevator pitch about who you are and what you're looking for.", url: "https://www.indeed.com/career-advice/interviewing/how-to-give-an-elevator-pitch-examples", label: "Elevator pitch guide (Indeed)" }
     ],
+    obstacleTodo: {
+      start: { text: "If you don't know who to contact yet, start with 3 people: a teacher, a Bridge alum, and someone in a role you want — ask each for one name of someone else to talk to." },
+      connect: { text: "Ask your Bridge coordinator or a mentor for one warm introduction before you cold-message anyone — a referral gets answered far more often than a cold message." },
+      tests: { text: "Make sure your CV fits one page and matches the language in the job posts you're targeting — that's often what gets you past the first screen." }
+    },
     stories: [
       { tag: "Connections", obstacle: "connect", title: "[Name]: how I got my first introduction", link: "https://example.com", audio: "" }, // PLACEHOLDER link — remove when you add a real story
       { tag: "Where to start", obstacle: "start", title: "[Name]: what I did first", link: "", audio: "" },
@@ -347,6 +364,10 @@ const TRACKS = [
       { text: "Apply to your first three roles and record each in a simple tracker. Columns: Company, Role, Date applied, Status, Follow-up date.", url: "templates/job-application-tracker.xlsx", label: "Application tracker (spreadsheet)" },
       { text: "Ask for feedback after any rejection." }
     ],
+    obstacleTodo: {
+      start: { text: "Pick one target role and apply to it fully — CV, cover note, follow-up — before spreading yourself across ten half-finished applications." },
+      connect: { text: "Message one person already working in the role or company you want and ask for 15 minutes to hear about their path in." }
+    },
     stories: [
       { tag: "Where to start", obstacle: "start", title: "[Name]: from Bridge to my first job", link: "", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }, // PLACEHOLDER audio — remove when you add a real story
       { tag: "Connections", obstacle: "connect", title: "[Name]: how a referral changed my search", link: "", audio: "" },
@@ -375,6 +396,10 @@ const TRACKS = [
       { text: "Decide whether to continue, change or stop, based on what you learned." },
       { text: "Share the idea with one person who will be honest with you." }
     ],
+    obstacleTodo: {
+      money: { text: "Before spending anything, list what you could test or launch with zero budget — most first versions don't need funding yet." },
+      connect: { text: "Ask one person outside your immediate circle — a mentor, a Bridge alum, a local founder — to introduce you to someone who's solved a similar problem." }
+    },
     stories: [
       { tag: "Funding", obstacle: "money", title: "[Name]: how I started with very little", link: "https://example.com", audio: "" }, // PLACEHOLDER link — remove when you add a real story
       { tag: "Where to start", obstacle: "start", title: "[Name]: my first 90 days", link: "", audio: "" },
@@ -420,6 +445,10 @@ const TRACKS = [
       { text: "Set a simple price and write down exactly what the client gets." },
       { text: "Ask your first client for a short testimonial." }
     ],
+    obstacleTodo: {
+      money: { text: "Choose a skill you can start practicing with free resources today — don't spend on a course until you know you'll stick with it." },
+      connect: { text: "Tell five people in your network what you're offering, even if you think they won't need it — most first clients come through someone you already know." }
+    },
     stories: [
       { tag: "Where to start", obstacle: "start", title: "[Name]: how I got my first paid client", link: "https://example.com", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }, // PLACEHOLDER link + audio — remove when you add a real story
       { tag: "Paying for training", obstacle: "money", title: "[Name]: learning a skill for free", link: "", audio: "" },
